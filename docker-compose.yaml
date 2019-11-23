@@ -1,18 +1,23 @@
 version: "3.6"
+
 services:
   vue:
     build:
-      context: ./vue
-      dockerfile: ./vue/Dockerfile
-      networks:
-        - webnet
+      context: ./vue/
+      dockerfile: ./Dockerfile
+    ports:
+      - 80:80
+    networks:
+      - webnet
 
   flask:
     build:
-      context: ./flask
-      dockerfile: ./flask/Dockerfile
-      networks:
-        - webnet
+      context: ./flask/
+      dockerfile: ./Dockerfile
+    ports:
+      - 5000:5000
+    networks:
+      - webnet
 
 networks:
   webnet:
