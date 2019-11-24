@@ -1,16 +1,5 @@
 <template>
   <div class="home">
-    <svg>
-      <defs>
-        <clipPath id="clipper">
-          <rect x="0" y="0" width="960" height="500" />
-        </clipPath>
-      </defs>
-      <g id="drawing-area">
-        <g id="cell-container"></g>
-        <g id="site-container"></g>
-      </g>
-    </svg>
     <div class="text">
       на словах он Лев Толстой
     </div>
@@ -79,8 +68,35 @@ export default {
     ymaps.ready(() => {
       this.map = new ymaps.Map('map', {
         center: [59.925863, 30.297596],
-        zoom: 9,
+        zoom: 11,
       });
+
+    // var myPolygon = new ymaps.Polygon([], {}, {
+    //   // Курсор в режиме добавления новых вершин.
+    //   editorDrawingCursor: "crosshair",
+    //   // Максимально допустимое количество вершин.
+    //   editorMaxPoints: 15,
+    //   // Цвет заливки.
+    //   fillColor: '#00FF00',
+    //   // Цвет обводки.
+    //   strokeColor: '#0000FF',
+    //   // Ширина обводки.
+    //   strokeWidth: 5
+    // });
+    // // Добавляем многоугольник на карту.
+    // this.map.geoObjects.add(myPolygon);
+    //
+    // // В режиме добавления новых вершин меняем цвет обводки многоугольника.
+    // var stateMonitor = new ymaps.Monitor(myPolygon.editor.state);
+    // stateMonitor.add("drawing", function (newValue) {
+    // myPolygon.options.set("strokeColor", newValue ? '#FF0000' : '#0000FF');
+    // });
+    //
+    // // Включаем режим редактирования с возможностью добавления новых вершин.
+    // myPolygon.editor.startDrawing();
+    // setInterval(() => {
+    //   console.log(myPolygon.editor.geometry.getCoordinates());
+    // }, 10000);
 
       var colors = []
       for (var i = 0; i < 20; i++) {
@@ -95,12 +111,20 @@ export default {
         sites.push({index: i, group: polygons[i].class, x: polygons[i].xy[0], y: polygons[i].xy[1], weight: 1, desc: polygons[i].desc, imgName: polygons[i].name}); //Math.random() % 4 + 4});
       }
 
-      var clippingPolygon = [[59.8917573454663, 29.864562988281236],[59.84480004673633, 29.870056152343725],[59.8060793547058, 30.11724853515623],
-      [59.75622922018841, 30.24359130859373],[59.64518338979969, 30.271057128906232],[59.66464309536815, 30.551208496093736],
-      [59.76177181429037, 30.70501708984374],[59.877953280934555, 30.54022216796873],[60.037727092930474, 30.584167480468732],
-      [60.12006574277216, 30.309509277343746],[60.06245035086033, 29.96343994140623],[59.946916096152094, 30.216125488281246],
-      [59.8834755971344, 30.183166503906225],[59.8917573454663, 29.864562988281236]]
-      // var clippingPolygon = [[0,0], [0,height], [width,height], [width,0]];
+      // var clippingPolygon = [[59.8917573454663, 29.864562988281236],[59.84480004673633, 29.870056152343725],[59.8060793547058, 30.11724853515623],
+      // [59.75622922018841, 30.24359130859373],[59.64518338979969, 30.271057128906232],[59.66464309536815, 30.551208496093736],
+      // [59.76177181429037, 30.70501708984374],[59.877953280934555, 30.54022216796873],[60.037727092930474, 30.584167480468732],
+      // [60.12006574277216, 30.309509277343746],[60.06245035086033, 29.96343994140623],[59.946916096152094, 30.216125488281246],
+      // [59.8834755971344, 30.183166503906225],[59.8917573454663, 29.864562988281236]]
+
+      var clippingPolygon = [[59.981997205577024, 30.23663710044241],[59.973738036434035, 30.209171280129905],
+      [59.940336160949975, 30.178272232278342],[59.910004193045665, 30.203678116067415],
+      [59.87826374164886, 30.179645523293967],[59.847358240425486, 30.298125527983082],
+      [59.856129465935766, 30.432593522653747],[59.92375896318132, 30.438773332224073],
+      [59.967850651632816, 30.427787004099066],[60.00067686044638, 30.383079339122347],
+      [59.993798259986214, 30.25673656568485],[59.981997205577024, 30.23663710044241]]
+
+
       var weightedVoronoi = d3.weightedVoronoi().clip(clippingPolygon);
       // var cells = sites.map(function(s){ return []; });	// stores, for each site, each cell's verteces
 
@@ -151,11 +175,11 @@ export default {
   watch: {
     polygons(newVal, oldVal) {
       // delete old
-      try {
-        this.map.geoObjects.removeAll()
-      } catch (e) {
-
-      }
+      // try {
+      //   this.map.geoObjects.removeAll()
+      // } catch (e) {
+      //
+      // }
       // for (let i = 0; i < oldVal.length; i++) {
       //   this.map.geoObjects.remove(oldVal[i])
       // }

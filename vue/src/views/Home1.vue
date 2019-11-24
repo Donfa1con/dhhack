@@ -124,6 +124,10 @@ export default {
       this.polygons = polyArr
       // console.log(polyArr);
 
+      // setTimeout(() => {
+      //   console.log(myPolygon.editor.geometry.getCoordinates());
+      //   coords = myPolygon.editor.geometry.getCoordinates()
+      // }, 10000);
     })
 
   },
