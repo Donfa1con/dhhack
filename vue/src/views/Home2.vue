@@ -232,7 +232,7 @@ export default {
   top: calc(360px - 250px);
   filter: grayscale(0.3);
   opacity: 0;
-  animation: wait 1s 0s forwards;
+  animation: wait 1s 5s forwards;
 
   @media (max-width: 400px) {
     height: 440px;
