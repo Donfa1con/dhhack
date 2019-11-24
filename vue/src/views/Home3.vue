@@ -73,19 +73,34 @@ export default {
   name: 'home',
   data: () => ({
     map: {},
+    objectManager: {},
     polygons: [],
   }),
   created() {
+    var colors = []
+    for (var i = 0; i < 20; i++) {
+      colors.push(getRandomColor())
+    }
+
     ymaps.ready(() => {
       this.map = new ymaps.Map('map', {
         center: [59.925863, 30.297596],
         zoom: 9,
       });
 
-      var colors = []
-      for (var i = 0; i < 20; i++) {
-        colors.push(getRandomColor())
-      }
+      this.objectManager = new ymaps.ObjectManager({
+          // Чтобы метки начали кластеризоваться, выставляем опцию.
+          clusterize: true,
+          // ObjectManager принимает те же опции, что и кластеризатор.
+          gridSize: 32,
+          clusterDisableClickZoom: true
+      });
+
+      // Чтобы задать опции одиночным объектам и кластерам,
+      // обратимся к дочерним коллекциям ObjectManager.
+      this.objectManager.objects.options.set('preset', 'default#image');
+      this.objectManager.clusters.options.set('preset', 'islands#greenClusterIcons');
+      this.map.geoObjects.add(this.objectManager);
 
       const polygons = points_cloud
       console.log(points_cloud[0]);
@@ -103,6 +118,12 @@ export default {
       // var clippingPolygon = [[0,0], [0,height], [width,height], [width,0]];
       var weightedVoronoi = d3.weightedVoronoi().clip(clippingPolygon);
       // var cells = sites.map(function(s){ return []; });	// stores, for each site, each cell's verteces
+
+
+      var objForObjMan = {
+        type: "FeatureCollection",
+        features: []
+      }
 
 
       var cells = weightedVoronoi(sites);
@@ -126,36 +147,43 @@ export default {
         //     preset: 'islands#icon',
         //     iconColor: '#0095b6'
         // }))
-        polyArr.push(
-          new ymaps.Placemark([cells[i].site.x, cells[i].site.y], {
-              balloonContent: cells[i].site.originalObject.desc
-          },{
-              iconLayout: 'default#image',
-              // Своё изображение иконки метки.
-              iconImageHref: `${cells[i].site.originalObject.imgName}.png`,
-              // Размеры метки.
-              iconImageSize: [42, 42],
-              // Смещение левого верхнего угла иконки относительно
-              // её "ножки" (точки привязки).
-              iconImageOffset: [0, 0]
-          })
-        )
-      }
-      console.log(cells[1]);
-      this.polygons = polyArr
-      // console.log(polyArr);
 
-    })
+        objForObjMan.features.push(
+          {
+            type: "Feature",
+            id: i,
+            geometry: {
+              type: "Point",
+              coordinates: [cells[i].site.x, cells[i].site.y]
+            },
+            properties: {
+              balloonContent: cells[i].site.originalObject.desc,
+              iconLayout: 'default#image',
+              iconImageHref: `${cells[i].site.originalObject.imgName}.png`,
+              iconImageSize: [42, 42],
+              iconImageOffset: [0, 0]
+            }
+          })
+        }
+
+
+        this.objectManager.add(objForObjMan)
+
+
+        console.log(cells[1]);
+        this.polygons = polyArr
+        // console.log(polyArr);
+      })
 
   },
   watch: {
     polygons(newVal, oldVal) {
       // delete old
-      try {
-        this.map.geoObjects.removeAll()
-      } catch (e) {
-
-      }
+      // try {
+      //   this.map.geoObjects.removeAll()
+      // } catch (e) {
+      //
+      // }
       // for (let i = 0; i < oldVal.length; i++) {
       //   this.map.geoObjects.remove(oldVal[i])
       // }
