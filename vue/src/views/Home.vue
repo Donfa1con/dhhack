@@ -1,6 +1,12 @@
 <template>
   <div class="home">
+    <div class="text">
+      на словах он Лев Толстой
+    </div>
     <div id="map"></div>
+    <div class="text" style="top: 640px;">
+      а на деле Лев Толстой
+    </div>
   </div>
 </template>
 
@@ -73,12 +79,50 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 #map {
-  width: 900px;
-  height: 600px;
+  width: 800px;
+  height: 500px;
   display: block;
   position: absolute;
-  left: calc(50% - 450px);
+  left: calc(50% - 400px);
+  top: calc(360px - 250px);
+  filter: hue-rotate(45deg);
+  opacity: 0;
+  animation: wait 1s 5s forwards;
+
+  @media (max-width: 400px) {
+    height: 440px;
+    top: 160px;
+    left: 10vw;
+    width: 80vw;
+  }
+}
+
+.text {
+  position: absolute;
+  left: 0;
+  width: 100vw;
+  font-size: 6vw;
+  color: white;
+  font-weight: 900;
+  text-shadow: 2px 0px 2px black,
+    0px 2px 2px black,
+    0px -2px 2px black,
+    -2px -0px 2px black;
+
+  @media (max-width: 400px) {
+    font-size: 12.5vw;
+  }
+}
+
+@keyframes wait {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
 }
 </style>
