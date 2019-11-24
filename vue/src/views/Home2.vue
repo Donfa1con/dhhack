@@ -26,6 +26,7 @@ function getRandomColor() {
 }
 
 
+
 var duration = 250;
 var _2PI = 2*Math.PI;
 
@@ -98,9 +99,36 @@ export default {
     //   console.log(myPolygon.editor.geometry.getCoordinates());
     // }, 10000);
 
-      var colors = []
+      // var colors = [
+      //   // '#ffffff',
+      //   "#4C191B",
+      //   "#963D5A",
+      //   "#564787",
+      //   "#C589E8",
+      //   "#E3DAFF",
+      //   "#ECFF08",
+      //   "#46b3e6",
+      //   "#9AD4D6",
+      //   "#9792E3",
+      //   "#DB6BD8",
+      // ]
+      var colors = [
+        "#003666",
+        "#00aeff",
+        "#ff6a00",
+        "#8e43e7",
+        "#ce181e",
+        "#b84592",
+        "#ff4f81",
+        "#ff6c5f",
+        "#ffc168",
+        "#2dde98",
+        "#1cc7d0",
+        // "#",
+        // "#",
+      ]
       for (var i = 0; i < 20; i++) {
-        colors.push(getRandomColor())
+        colors[i] += '66'
       }
 
       const polygons = points_cloud
@@ -136,7 +164,7 @@ export default {
             balloonContent: cells[i].site.originalObject ? cells[i].site.originalObject.desc : i,
           }, {
             // Фоновое изображение.
-            fillColor: colors[cells[i].site.originalObject.group],
+            fillColor: colors[cells[i].site.originalObject.group % colors.length],
             // fillImageHref: 'https://uznayvse.ru/images/celebs/2019/7/lev-tolstoy_big.jpg',
             // Тип заливки фоном.
             fillMethod: 'clip',
@@ -158,7 +186,7 @@ export default {
               // Своё изображение иконки метки.
               iconImageHref: `${cells[i].site.originalObject.imgName}.png`,
               // Размеры метки.
-              iconImageSize: [42, 42],
+              iconImageSize: [30, 30],
               // Смещение левого верхнего угла иконки относительно
               // её "ножки" (точки привязки).
               iconImageOffset: [0, 0]
@@ -202,7 +230,7 @@ export default {
   position: absolute;
   left: calc(50% - 400px);
   top: calc(360px - 250px);
-  filter: hue-rotate(45deg);
+  filter: grayscale(0.3);
   opacity: 0;
   animation: wait 1s 0s forwards;
 
